@@ -1,5 +1,5 @@
 package com.example.smartfeeder
 
-data class Lora(var stock: Double,
-                var plate: Double,
-                var rate: Int)
+data class Lora(var stock: String,
+                var plate: String,
+                var rate: String)
