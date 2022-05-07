@@ -80,7 +80,6 @@
                     android:layout_height="wrap_content"
                     android:text="@{lora.rate}"
                     android:textSize="24sp"
-                    android:inputType="number"
                     app:layout_constraintStart_toEndOf="@+id/rate_first"
                     app:layout_constraintTop_toTopOf="parent" />
 
