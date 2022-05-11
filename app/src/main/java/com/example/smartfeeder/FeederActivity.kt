@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.smartfeeder.databinding.ActivityFeederBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,12 +18,13 @@ class FeederActivity : AppCompatActivity() {
 
     private var ready = false
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feeder)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_feeder)
-        binding.lora = Lora("-.---", "-.---", "")
+        binding.lora = Lora("-.---", "-.---", "", "01/01/1970 00:00")
 
         GlobalScope.launch(Dispatchers.IO) {
             getData()
@@ -31,11 +33,11 @@ class FeederActivity : AppCompatActivity() {
         val buttonDispense = findViewById<Button>(R.id.dispense)
         val buttonApply = findViewById<Button>(R.id.apply)
 
-        buttonDispense.setOnClickListener() {
+        buttonDispense.setOnClickListener {
             Toast.makeText(baseContext, "Won\'t dispense \'til data is ready",
                 Toast.LENGTH_SHORT).show()
         }
-        buttonApply.setOnClickListener() {
+        buttonApply.setOnClickListener {
             Toast.makeText(baseContext, "Won\'t apply \'til data is ready",
                 Toast.LENGTH_SHORT).show()
         }
@@ -45,6 +47,6 @@ class FeederActivity : AppCompatActivity() {
     }
 
     private fun getData() {
-
+        
     }
 }

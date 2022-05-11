@@ -9,4 +9,5 @@
     <string name="dispense_every">Feed every</string>
     <string name="hours">hours</string>
     <string name="apply">Apply</string>
+    <string name="last_fed">Last fed at:\n%s</string>
 </resources>
