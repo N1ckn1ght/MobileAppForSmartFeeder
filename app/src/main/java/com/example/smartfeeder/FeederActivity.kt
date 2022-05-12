@@ -13,6 +13,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
+import java.lang.Double.parseDouble
+import java.lang.Integer.parseInt
+import java.text.DecimalFormat
+import kotlin.math.round
 
 class FeederActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFeederBinding
@@ -47,7 +51,8 @@ class FeederActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            // TODO: action on ready
+            // TODO: pass dispense command, get new data
+            ready = false
         }
         buttonApply.setOnClickListener {
             if (!ready) {
@@ -56,7 +61,8 @@ class FeederActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            // TODO: action on ready
+            // TODO: pass change to the database, get new data
+            ready = false
         }
     }
 
@@ -75,8 +81,39 @@ class FeederActivity : AppCompatActivity() {
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                Log.d("d/response", response.body.toString())
+                var data = "-.---\t-.---\t\t01/01/1970 00:00"
+                response.body?.let {
+                    data = it.string()
+                }
+                val result = parse(data)
+                binding.lora = Lora(result[0], result[1], result[2], result[3])
+                ready = true
             }
         })
+    }
+
+    private fun parse(data: String): Array<String> {
+        val parts = data.split("\t")
+
+        val format = DecimalFormat("0.#")
+        val weight = DecimalFormat("0.000")
+
+        val stock = weight.format(round(parseDouble(parts[0])) / 1000).toString()
+        val plate = weight.format(round(parseDouble(parts[1])) / 1000).toString()
+        val rate = format.format(parseInt(parts[2]).toDouble() / 60).toString()
+        val fed = parseDateTime(parts[3])
+
+        return arrayOf(stock, plate, rate, fed)
+    }
+
+    private fun parseDateTime(timestamp: String): String {
+        val year = timestamp.subSequence(0, 4)
+        val month = timestamp.subSequence(4, 6)
+        val day = timestamp.subSequence(6, 8)
+        val hour = timestamp.subSequence(8, 10)
+        val minute = timestamp.subSequence(10, 12)
+        // val second = timestamp.subSequence(12, 14)
+
+        return "$day/$month/$year $hour:$minute"
     }
 }
