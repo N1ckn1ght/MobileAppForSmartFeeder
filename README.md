@@ -2,4 +2,4 @@
 
 На текущий момент требует адрес и порт сервера, а также идентификатор esp'шки, по которой ведётся взаимодействие.
 
-<img src="https://i.imgur.com/ELMCEwN.png>
+<img src="https://i.imgur.com/ELMCEwN.png">
