@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">Smart Dispenser</string>
 
-    <string name="debug_move_to_feeder">Move to feeder</string>
+    <string name="debug_disclaimer">This window is solely for debug purposes. It exists because of lack of stable server, here shall be a map with working esp marked on.</string>
+    <string name="debug_enter_datr">Enter testing esp datr:</string>
+    <string name="debug_testing_datr">SF9BW125</string>
+    <string name="debug_enter_ip">Enter server IP:</string>
+    <string name="debug_enter_port">Enter server port:</string>
+    <string name="debug_port">5000</string>
+    <string name="debug_move_to_feeder">Connect</string>
 
     <string name="stock">Left in stock: %s kg</string>
     <string name="plate">Left on plate: %s kg</string>
@@ -10,4 +16,7 @@
     <string name="hours">hours</string>
     <string name="apply">Apply</string>
     <string name="last_fed">Last fed at:\n%s</string>
+
+    <string name="data_not_ready">Won\'t dispense \'til data is ready</string>
+    <string name="no_connection_to_server">No connection to the server</string>
 </resources>

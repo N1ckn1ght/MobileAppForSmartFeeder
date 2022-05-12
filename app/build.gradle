@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.smartfeeder"
-        minSdk 22
+        minSdk 23
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -36,7 +36,10 @@ android {
 
 dependencies {
     // databinding support
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.10'
+
+    // http request support
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     // coroutines support
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt'
