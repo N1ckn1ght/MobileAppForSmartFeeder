@@ -1,8 +1,8 @@
 package com.example.smartfeeder
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -51,8 +51,10 @@ class FeederActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            // TODO: pass dispense command, get new data
             ready = false
+            GlobalScope.launch(Dispatchers.IO) {
+                sendData("dispense", mutableListOf())
+            }
         }
         buttonApply.setOnClickListener {
             if (!ready) {
@@ -61,15 +63,17 @@ class FeederActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            // TODO: pass change to the database, get new data
+            val etRate = findViewById<EditText>(R.id.rate_second)
             ready = false
+            GlobalScope.launch(Dispatchers.IO) {
+                sendData("rate", mutableListOf(etRate.text.toString()))
+            }
         }
     }
 
     private fun getData() {
         val formBody = FormBody.Builder().add("datr", datr).build()
-        val request = Request.Builder().url("http://$ip:$port/status").post(formBody).build()
-        Log.d("d/response", "Connecting to: http://$ip:$port/status")
+        val request = Request.Builder().url("http://$ip:$port/get").post(formBody).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -92,15 +96,40 @@ class FeederActivity : AppCompatActivity() {
         })
     }
 
+    private fun sendData(name: String, argv: MutableList<String>) {
+        val form = FormBody.Builder().add("datr", datr)
+        if (name == "dispense") {
+            form.add("dispense", "1")
+        }
+        if (name == "rate") {
+            form.add("rate", argv[0])
+        }
+        val formBody = form.build()
+        val request = Request.Builder().url("http://$ip:$port/set").post(formBody).build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    Toast.makeText(applicationContext, applicationContext.getString(
+                        R.string.no_connection_to_server), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                getData()
+            }
+        })
+    }
+
     private fun parse(data: String): Array<String> {
         val parts = data.split("\t")
 
-        val format = DecimalFormat("0.#")
         val weight = DecimalFormat("0.000")
 
         val stock = weight.format(round(parseDouble(parts[0])) / 1000).toString()
         val plate = weight.format(round(parseDouble(parts[1])) / 1000).toString()
-        val rate = format.format(parseInt(parts[2]).toDouble() / 60).toString()
+        val rate = parseInt(parts[2]).toString()
         val fed = parseDateTime(parts[3])
 
         return arrayOf(stock, plate, rate, fed)
@@ -112,7 +141,6 @@ class FeederActivity : AppCompatActivity() {
         val day = timestamp.subSequence(6, 8)
         val hour = timestamp.subSequence(8, 10)
         val minute = timestamp.subSequence(10, 12)
-        // val second = timestamp.subSequence(12, 14)
 
         return "$day/$month/$year $hour:$minute"
     }

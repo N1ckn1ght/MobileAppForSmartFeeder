@@ -88,7 +88,7 @@
                     android:id="@+id/rate_third"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/hours"
+                    android:text="@string/minutes"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/rate_second"

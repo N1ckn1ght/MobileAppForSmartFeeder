@@ -13,7 +13,7 @@
     <string name="plate">Left on plate: %s kg</string>
     <string name="dispense_now">Dispense now</string>
     <string name="dispense_every">Feed every</string>
-    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
     <string name="apply">Apply</string>
     <string name="last_fed">Last fed at:\n%s</string>
 
