@@ -1,6 +1,8 @@
 package com.example.smartfeeder
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -20,18 +22,20 @@ import kotlin.math.round
 
 class FeederActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFeederBinding
+    private lateinit var buttonDispense: Button
+    private lateinit var buttonApply: Button
     private val client = OkHttpClient()
     private var ready = false
-    private var datr = ""
-    private var ip = ""
+    private var ipClient = ""
+    private var ipServer = ""
     private var port = ""
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feeder)
-        datr = intent.getStringExtra("datr").toString()
-        ip = intent.getStringExtra("ip").toString()
+        ipClient = intent.getStringExtra("ipClient").toString()
+        ipServer = intent.getStringExtra("ipServer").toString()
         port = intent.getStringExtra("port").toString()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_feeder)
@@ -41,8 +45,8 @@ class FeederActivity : AppCompatActivity() {
             getData()
         }
 
-        val buttonDispense = findViewById<Button>(R.id.dispense)
-        val buttonApply = findViewById<Button>(R.id.apply)
+        buttonDispense = findViewById<Button>(R.id.dispense)
+        buttonApply = findViewById<Button>(R.id.apply)
 
         buttonDispense.setOnClickListener {
             if (!ready) {
@@ -51,7 +55,7 @@ class FeederActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            ready = false
+            setReady(false)
             GlobalScope.launch(Dispatchers.IO) {
                 sendData("dispense", mutableListOf())
             }
@@ -64,7 +68,7 @@ class FeederActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val etRate = findViewById<EditText>(R.id.rate_second)
-            ready = false
+            setReady(false)
             GlobalScope.launch(Dispatchers.IO) {
                 sendData("rate", mutableListOf(etRate.text.toString()))
             }
@@ -72,8 +76,8 @@ class FeederActivity : AppCompatActivity() {
     }
 
     private fun getData() {
-        val formBody = FormBody.Builder().add("datr", datr).build()
-        val request = Request.Builder().url("http://$ip:$port/get").post(formBody).build()
+        val formBody = FormBody.Builder().add("ip", ipClient).build()
+        val request = Request.Builder().url("http://$ipServer:$port/get").post(formBody).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -91,13 +95,15 @@ class FeederActivity : AppCompatActivity() {
                 }
                 val result = parse(data)
                 binding.lora = Lora(result[0], result[1], result[2], result[3])
-                ready = true
+                runOnUiThread {
+                    setReady(true)
+                }
             }
         })
     }
 
     private fun sendData(name: String, argv: MutableList<String>) {
-        val form = FormBody.Builder().add("datr", datr)
+        val form = FormBody.Builder().add("ip", ipClient)
         if (name == "dispense") {
             form.add("dispense", "1")
         }
@@ -105,7 +111,7 @@ class FeederActivity : AppCompatActivity() {
             form.add("rate", argv[0])
         }
         val formBody = form.build()
-        val request = Request.Builder().url("http://$ip:$port/set").post(formBody).build()
+        val request = Request.Builder().url("http://$ipServer:$port/set").post(formBody).build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -117,7 +123,25 @@ class FeederActivity : AppCompatActivity() {
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                getData()
+                var result = ""
+                response.body?.let {
+                    result = it.string()
+                }
+                if (result == "error") {
+                    runOnUiThread {
+                        Toast.makeText(applicationContext, applicationContext
+                            .getString(R.string.unexpected_error), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(applicationContext, applicationContext
+                            .getString(R.string.please_wait), Toast.LENGTH_LONG).show()
+                    }
+                    @Suppress("DEPRECATION")
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        getData()
+                    }, 10000)
+                }
             }
         })
     }
@@ -143,5 +167,16 @@ class FeederActivity : AppCompatActivity() {
         val minute = timestamp.subSequence(10, 12)
 
         return "$day/$month/$year $hour:$minute"
+    }
+
+    private fun setReady(ready_: Boolean) {
+        if (ready_) {
+            buttonApply.isEnabled = true
+            buttonDispense.isEnabled = true
+        } else {
+            buttonApply.isEnabled = false
+            buttonDispense.isEnabled = false
+        }
+        ready = ready_
     }
 }

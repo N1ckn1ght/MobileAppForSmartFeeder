@@ -28,42 +28,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
-            android:id="@+id/enter_datr"
+            android:id="@+id/enter_ip_client"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/debug_enter_datr"
+            android:text="@string/debug_enter_ip_client"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/disclaimer" />
         <EditText
-            android:id="@+id/datr"
+            android:id="@+id/ip_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/debug_testing_datr"
+            android:text="@string/debug_testing_ip_client"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enter_datr" />
+            app:layout_constraintTop_toBottomOf="@+id/enter_ip_client" />
         <TextView
-            android:id="@+id/enter_ip"
+            android:id="@+id/enter_ip_server"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/debug_enter_ip"
+            android:text="@string/debug_enter_ip_server"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/datr" />
+            app:layout_constraintTop_toBottomOf="@+id/ip_client" />
         <EditText
-            android:id="@+id/ip"
+            android:id="@+id/ip_server"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text=""
+            android:text="@string/debug_testing_ip_server"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enter_ip" />
+            app:layout_constraintTop_toBottomOf="@+id/enter_ip_server" />
         <TextView
             android:id="@+id/enter_port"
             android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             android:text="@string/debug_enter_port"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ip" />
+            app:layout_constraintTop_toBottomOf="@+id/ip_server" />
         <EditText
             android:id="@+id/port"
             android:layout_width="match_parent"

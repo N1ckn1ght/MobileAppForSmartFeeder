@@ -2,9 +2,10 @@
     <string name="app_name">Smart Dispenser</string>
 
     <string name="debug_disclaimer">This window is solely for debug purposes. It exists because of lack of stable server, here shall be a map with working esp marked on.</string>
-    <string name="debug_enter_datr">Enter testing esp datr:</string>
-    <string name="debug_testing_datr">SF9BW125</string>
-    <string name="debug_enter_ip">Enter server IP:</string>
+    <string name="debug_enter_ip_client">Enter testing esp IP:</string>
+    <string name="debug_testing_ip_client"></string>
+    <string name="debug_enter_ip_server">Enter server IP:</string>
+    <string name="debug_testing_ip_server"></string>
     <string name="debug_enter_port">Enter server port:</string>
     <string name="debug_port">5000</string>
     <string name="debug_move_to_feeder">Connect</string>
@@ -19,4 +20,6 @@
 
     <string name="data_not_ready">Won\'t dispense \'til data is ready</string>
     <string name="no_connection_to_server">No connection to the server</string>
+    <string name="please_wait">Please wait 10 seconds...</string>
+    <string name="unexpected_error">Unexpected error\nIt\'s server\'s fault!</string>
 </resources>
