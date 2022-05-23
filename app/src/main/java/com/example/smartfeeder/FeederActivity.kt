@@ -26,7 +26,7 @@ class FeederActivity : AppCompatActivity() {
     private lateinit var buttonApply: Button
     private val client = OkHttpClient()
     private var ready = false
-    private var ipClient = ""
+    private var idClient = 0
     private var ipServer = ""
     private var port = ""
 
@@ -34,7 +34,7 @@ class FeederActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feeder)
-        ipClient = intent.getStringExtra("ipClient").toString()
+        idClient = intent.getIntExtra("idClient", 0)
         ipServer = intent.getStringExtra("ipServer").toString()
         port = intent.getStringExtra("port").toString()
 
@@ -45,8 +45,8 @@ class FeederActivity : AppCompatActivity() {
             getData()
         }
 
-        buttonDispense = findViewById<Button>(R.id.dispense)
-        buttonApply = findViewById<Button>(R.id.apply)
+        buttonDispense = findViewById(R.id.dispense)
+        buttonApply = findViewById(R.id.apply)
 
         buttonDispense.setOnClickListener {
             if (!ready) {
@@ -76,7 +76,7 @@ class FeederActivity : AppCompatActivity() {
     }
 
     private fun getData() {
-        val formBody = FormBody.Builder().add("ip", ipClient).build()
+        val formBody = FormBody.Builder().add("id", idClient.toString()).build()
         val request = Request.Builder().url("http://$ipServer:$port/get").post(formBody).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -103,7 +103,7 @@ class FeederActivity : AppCompatActivity() {
     }
 
     private fun sendData(name: String, argv: MutableList<String>) {
-        val form = FormBody.Builder().add("ip", ipClient)
+        val form = FormBody.Builder().add("id", idClient.toString())
         if (name == "dispense") {
             form.add("dispense", "1")
         }

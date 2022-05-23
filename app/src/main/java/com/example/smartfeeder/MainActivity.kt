@@ -11,14 +11,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val etIpClient = findViewById<EditText>(R.id.ip_client)
+        val etIdClient = findViewById<EditText>(R.id.id_client)
         val etIpServer = findViewById<EditText>(R.id.ip_server)
         val etPort = findViewById<EditText>(R.id.port)
         val button = findViewById<Button>(R.id.toFeeder)
 
         button.setOnClickListener {
             val intent = Intent(this, FeederActivity::class.java)
-            intent.putExtra("ipClient", etIpClient.text.toString())
+            intent.putExtra("idClient", etIdClient.text.toString().toInt())
             intent.putExtra("ipServer", etIpServer.text.toString())
             intent.putExtra("port", etPort.text.toString())
             startActivity(intent)

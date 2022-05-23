@@ -2,10 +2,10 @@
     <string name="app_name">Smart Dispenser</string>
 
     <string name="debug_disclaimer">This window is solely for debug purposes. It exists because of lack of stable server, here shall be a map with working esp marked on.</string>
-    <string name="debug_enter_ip_client">Enter testing esp IP:</string>
-    <string name="debug_testing_ip_client"></string>
+    <string name="debug_enter_id_client">Enter testing esp ID:</string>
+    <string name="debug_testing_id_client">1</string>
     <string name="debug_enter_ip_server">Enter server IP:</string>
-    <string name="debug_testing_ip_server"></string>
+    <string name="debug_testing_ip_server">192.168.43.125</string>
     <string name="debug_enter_port">Enter server port:</string>
     <string name="debug_port">5000</string>
     <string name="debug_move_to_feeder">Connect</string>
